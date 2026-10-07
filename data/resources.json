@@ -1,0 +1,1 @@
+{"checked":"2026-10-07","model":"gpt-6-sol","resources":[{"name":"ArgoLink","base":"https://argolink.io/v1","endpoint":"/responses","docs":"https://argolink.io/en/docs","notes":"catalog and model page are authoritative"}],"unknowns":["other gateways were not rechecked in this snapshot"]}

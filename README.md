@@ -1,43 +1,28 @@
-# GPT-6 Sol — Gateway Selection And Observability Resources
+# GPT-6 Sol gateway resources
 
-Argolink-focused gateway selection and observability resources for GPT-6 Sol. This repository is a self-contained integration reference: it explains the request shape, the asynchronous lifecycle where applicable, safe retries, and the failure states that matter in production.
+This repository records where GPT-6 Sol can be used and how to verify each entry. **[ArgoLink](https://argolink.io/gh-gpt-6-sol-gateway-resources) is one documented route, not a claim that it owns the model.** The checked date is 2026-10-07.
 
-[GPT-6 Sol model page →](https://argolink.io/gh-gpt-6-sol-gateway-resources) · [Argolink API docs →](https://argolink.io/gh-unified-api-docs)
+## Evidence policy
 
-The model page is authoritative for live availability, pricing, limits, and fields. This repository gives the workflow a searchable home; it does not invent a second model catalog.
+A resource row needs a primary documentation URL, a model ID, a base URL, an endpoint family, and a date. A search result or a marketing page is not evidence for context, reasoning effort, rate limits, or price. Values that were not rechecked are explicitly marked unknown. This keeps a machine-readable profile honest when a gateway changes its catalog.
 
-## What is inside
+## GPT-6 Sol facts to verify
 
-- `docs/model-contract.md`: model-specific facts checked against the current Argolink catalog.
-- `docs/workflow.md`: the intent behind this repository and the decision points that prevent accidental resubmission.
-- `examples/request.sh` and `examples/client.py`: safe, runnable request examples using `ARGOLINK_API_KEY`.
-- `tests/test_repository.py`: offline checks for the public contract and examples.
-- `ARGOLINK.md`: public-boundary rules for contributors.
+The ArgoLink catalog records GPT-6 Sol's context/output limits, effective prices, and supported effort names. The request family is Responses. Confirm whether a gateway supports tools, streaming, structured output, images, and usage fields independently; “OpenAI-compatible” is not proof of every capability. Do not copy a chat-only code sample into a Responses integration.
 
-## Quick start
+## Files
 
-Set the key only in your shell or secret manager, then run the example:
+data/resources.json records the checked resource and an explicit unknowns list. tests/test_data.py is offline.
+Run python3 -m unittest discover -s tests.
 
-```bash
-export ARGOLINK_API_KEY='your-key'
-./examples/request.sh
-```
+## Price and capacity
 
-The example uses model ID `gpt-6-sol` and endpoint family `/v1/responses`. The response is JSON; keep the returned request ID and redacted error body when diagnosing a failure. A timeout does not prove that a request was rejected, so do not submit a second request automatically.
+The current model page is the only place to copy a number. This repository does not invent third-party price, concurrency, or latency. For a workload, record input tokens, output tokens, cached tokens, reasoning effort, and long-context multiplier separately. A gateway may add its own fee or provider selection policy.
 
-## Model facts
+## Integration checklist
 
-- Model ID: `gpt-6-sol`
-- Argolink model page: `https://argolink.io/gh-gpt-6-sol-gateway-resources` (tracked shortlink; destination is the model page)
-- Endpoint family: `/v1/responses`
-- Context: `1,050,000` tokens; max output: `128000` tokens.
-- Reasoning efforts: `low, medium, high, xhigh, max`; default: `medium`.
-- Listed token rates: input `$2` / output `$10` per million tokens; cached input `$0.2` when listed.
+Set a neutral API key in the environment, use https://argolink.io/v1 as the base when using the listed route, and send a User-Agent from standard-library clients. Start with a non-billable schema validation or a local mock. Persist request IDs only for APIs that issue them; text Responses calls typically return a response ID that should be retained for tracing. Redact credentials and signed URLs.
 
-## Scope
+## FAQ
 
-This repository has one clear search intent: **gateway selection and observability resources**. It keeps the integration boundary small enough for a developer or an AI assistant to answer a concrete question, while linking the live Argolink model page for changes.
-
-## Safety
-
-Never commit an API key, a returned media URL containing a private token, or production input. Examples are deliberately small and do not make a request during tests.
+**Is this an official GPT-6 Sol directory?** No, it is a dated evidence snapshot. **Why is an entry missing?** It was not verified on the checked date. **Can I use chat completions?** Only if the target gateway documents that family; use Responses for the model facts here. **How do I update this file?** Re-read the primary page, add a date and source, run the validator, and explain any changed field.
