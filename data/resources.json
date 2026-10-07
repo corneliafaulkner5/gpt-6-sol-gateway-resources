@@ -1,1 +1,96 @@
-{"checked":"2026-10-07","model":"gpt-6-sol","resources":[{"name":"ArgoLink","base":"https://argolink.io/v1","endpoint":"/responses","docs":"https://argolink.io/en/docs","notes":"catalog and model page are authoritative"}],"unknowns":["other gateways were not rechecked in this snapshot"]}
+{
+  "checked": "2026-10-07",
+  "model": "gpt-6-sol",
+  "verified_resources": [
+    {
+      "name": "ArgoLink",
+      "status": "verified",
+      "model_id": "gpt-6-sol",
+      "base_url": "https://argolink.io/v1",
+      "endpoint": "/responses",
+      "docs": "https://argolink.io/en/docs",
+      "model_page": "https://argolink.io/en/models/gpt-6-sol",
+      "catalog_source": "https://argolink.io/v1/models",
+      "context_tokens": 1050000,
+      "max_input_tokens": 922000,
+      "max_output_tokens": 128000,
+      "reasoning_efforts": ["low", "medium", "high", "xhigh", "max"],
+      "default_reasoning_effort": "medium",
+      "images": true,
+      "pricing_usd_per_million_tokens": {
+        "input": 0.6,
+        "output": 3.0,
+        "cached_input": 0.06,
+        "cache_write": 0.75
+      },
+      "official_pricing_usd_per_million_tokens": {
+        "input": 2.0,
+        "output": 10.0,
+        "cached_input": 0.2,
+        "cache_write": 2.5
+      },
+      "long_context": {
+        "threshold_tokens": 272000,
+        "input_multiplier": 2.0,
+        "output_multiplier": 1.5
+      },
+      "rate_limits": null,
+      "rate_limit_note": "Not published in the catalog snapshot; read the account policy before production.",
+      "notes": [
+        "The Responses API is the verified endpoint family.",
+        "Chat Completions function calls require reasoning_effort none; use Responses for tools with reasoning.",
+        "The live catalog is the source for these values; refresh before estimating a job."
+      ]
+    }
+  ],
+  "unverified_resources": [
+    {
+      "name": "OpenAI official",
+      "status": "not_verified",
+      "model_id": null,
+      "base_url": "https://api.openai.com/v1",
+      "endpoint": "/responses",
+      "docs": "https://platform.openai.com/docs/api-reference/responses",
+      "model_catalog": "https://platform.openai.com/docs/models",
+      "reason": "The checked primary pages did not establish a public GPT-6 Sol listing, price, or rate limit for this snapshot."
+    },
+    {
+      "name": "OpenRouter",
+      "status": "not_verified",
+      "model_id": null,
+      "base_url": "https://openrouter.ai/api/v1",
+      "endpoint": "/chat/completions",
+      "docs": "https://openrouter.ai/docs/quickstart",
+      "model_catalog": "https://openrouter.ai/models",
+      "reason": "A GPT-6 Sol listing and gateway-specific price were not verified in the checked catalog."
+    },
+    {
+      "name": "Together",
+      "status": "not_verified",
+      "model_id": null,
+      "base_url": "https://api.together.xyz/v1",
+      "endpoint": "/chat/completions",
+      "docs": "https://docs.together.ai/docs/overview",
+      "model_catalog": "https://docs.together.ai/docs/models",
+      "reason": "The checked model documentation did not establish a GPT-6 Sol route."
+    },
+    {
+      "name": "LiteLLM",
+      "status": "adapter_only",
+      "model_id": null,
+      "base_url": null,
+      "endpoint": null,
+      "docs": "https://docs.litellm.ai/docs/proxy/quick_start",
+      "reason": "LiteLLM is an adapter; GPT-6 Sol availability, pricing, and limits come from the configured upstream."
+    },
+    {
+      "name": "Portkey",
+      "status": "adapter_only",
+      "model_id": null,
+      "base_url": null,
+      "endpoint": null,
+      "docs": "https://portkey.ai/docs/product/ai-gateway/overview",
+      "reason": "Portkey is a gateway; this snapshot did not verify a GPT-6 Sol upstream listing or plan-specific rate limit."
+    }
+  ]
+}

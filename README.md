@@ -1,28 +1,52 @@
 # GPT-6 Sol gateway resources
 
-This repository records where GPT-6 Sol can be used and how to verify each entry. **[ArgoLink](https://argolink.io/gh-gpt-6-sol-gateway-resources) is one documented route, not a claim that it owns the model.** The checked date is 2026-10-07.
+This repository is a dated, machine-readable evidence snapshot for **GPT-6 Sol**. It records one verified API route and separates unverified gateways instead of assuming that an OpenAI-compatible label means the model is available. **[ArgoLink](https://argolink.io/gh-gpt-6-sol-gateway-resources) is a documented route, not a claim that it owns the model.** Checked 2026-10-07.
 
-## Evidence policy
+## Verified route
 
-A resource row needs a primary documentation URL, a model ID, a base URL, an endpoint family, and a date. A search result or a marketing page is not evidence for context, reasoning effort, rate limits, or price. Values that were not rechecked are explicitly marked unknown. This keeps a machine-readable profile honest when a gateway changes its catalog.
+The live ArgoLink model catalog lists `gpt-6-sol` on `POST https://argolink.io/v1/responses`:
 
-## GPT-6 Sol facts to verify
+- context window: 1,050,000 tokens;
+- maximum input: 922,000 tokens;
+- maximum output: 128,000 tokens;
+- reasoning efforts: `low`, `medium`, `high`, `xhigh`, `max` (default `medium`);
+- image input: supported in the catalog;
+- effective price per million tokens: input $0.60, output $3.00, cached input $0.06, cache write $0.75;
+- official reference price in the same catalog: input $2.00, output $10.00, cached input $0.20, cache write $2.50;
+- long-context rule: above 272,000 input tokens, input multiplier 2× and output multiplier 1.5×.
 
-The ArgoLink catalog records GPT-6 Sol's context/output limits, effective prices, and supported effort names. The request family is Responses. Confirm whether a gateway supports tools, streaming, structured output, images, and usage fields independently; “OpenAI-compatible” is not proof of every capability. Do not copy a chat-only code sample into a Responses integration.
+The catalog does **not** publish a numeric rate-limit value in this snapshot. Treat that as unknown and read the account policy before production. Model facts, pricing, and limits belong to the live catalog/model page, not this README; `data/resources.json` stores the captured values and sources.
 
-## Files
+## Where else can it be called?
 
-data/resources.json records the checked resource and an explicit unknowns list. tests/test_data.py is offline.
-Run python3 -m unittest discover -s tests.
+`data/resources.json` lists OpenAI official, OpenRouter, Together, LiteLLM, and Portkey as unverified or adapter-only for this date. That is deliberate: a gateway can expose a route without exposing this exact model ID, and an adapter inherits the configured upstream's limits and prices. Do not advertise a provider as a GPT-6 Sol endpoint until its primary model catalog and request example show the exact ID.
 
-## Price and capacity
+For OpenAI-compatible gateways, verify all of these independently:
 
-The current model page is the only place to copy a number. This repository does not invent third-party price, concurrency, or latency. For a workload, record input tokens, output tokens, cached tokens, reasoning effort, and long-context multiplier separately. A gateway may add its own fee or provider selection policy.
+1. exact model ID and `/responses` versus `/chat/completions` endpoint;
+2. reasoning-effort names and whether tools work while reasoning is enabled;
+3. context, input, and output limits;
+4. input-image support, modalities, streaming, structured output, and usage fields;
+5. price unit, cached-input treatment, long-context multiplier, quotas, and rate-limit headers;
+6. request-ID behavior, timeout semantics, and whether a failed POST is safe to replay.
 
 ## Integration checklist
 
-Set a neutral API key in the environment, use https://argolink.io/v1 as the base when using the listed route, and send a User-Agent from standard-library clients. Start with a non-billable schema validation or a local mock. Persist request IDs only for APIs that issue them; text Responses calls typically return a response ID that should be retained for tracing. Redact credentials and signed URLs.
+Set a neutral API key in the environment, use `https://argolink.io/v1` as the base for the verified route, and send a descriptive `User-Agent` from standard-library clients. Begin with a local mock or schema validation; this repository makes no billable calls. Keep response IDs for tracing, redact credentials and signed URLs, and record the selected model and reasoning effort in the job manifest.
 
-## FAQ
+For tools with reasoning, use the Responses API. The catalog caveat says Chat Completions functions are available only with `reasoning_effort` set to `none`; do not silently translate a tool loop between endpoint families. A gateway fallback should be explicit and should record a different model ID and price estimate.
 
-**Is this an official GPT-6 Sol directory?** No, it is a dated evidence snapshot. **Why is an entry missing?** It was not verified on the checked date. **Can I use chat completions?** Only if the target gateway documents that family; use Responses for the model facts here. **How do I update this file?** Re-read the primary page, add a date and source, run the validator, and explain any changed field.
+## Files and validation
+
+- [`data/resources.json`](data/resources.json) is the machine-readable evidence record. `verified_resources` contains only the ArgoLink route; `unverified_resources` contains links that need a fresh primary-source check.
+- `tests/test_data.py` validates required fields, numeric prices, the long-context rule, and the explicit unknown-rate-limit state.
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+Re-read the primary model page and update the date before using this snapshot for a production estimate.
+
+## Primary sources
+
+[ArgoLink model list](https://argolink.io/v1/models) · [ArgoLink docs](https://argolink.io/en/docs) · [OpenAI Responses reference](https://platform.openai.com/docs/api-reference/responses) · [OpenRouter quickstart](https://openrouter.ai/docs/quickstart) · [Together overview](https://docs.together.ai/docs/overview) · [LiteLLM proxy quickstart](https://docs.litellm.ai/docs/proxy/quick_start) · [Portkey AI Gateway](https://portkey.ai/docs/product/ai-gateway/overview)
